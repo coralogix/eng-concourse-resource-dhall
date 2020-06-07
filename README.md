@@ -13,7 +13,7 @@ Because Dhall's performance is highly dependent upon the presence of a warm cach
 In other words, you should build a custom image with, e.g.:
 
 ```Dockerfile
-FROM quay.io/coralogix/dhall-concourse-resource:1.32.0
+FROM quay.io/coralogix/dhall-concourse-resource:v1.32.0
 
 RUN set -ex; \
     dhall >/dev/null <<< https://raw.githubusercontent.com/dhall-lang/dhall-lang/v16.0.0/Prelude/package.dhall && \
