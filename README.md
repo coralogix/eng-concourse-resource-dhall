@@ -39,7 +39,7 @@ resource_types:
   type: registry-image
   source:
     repository: quay.io/coralogix/dhall-concourse-resource
-    tag: v0.1.0
+    tag: v1.32.0
 ```
 
 Fetching the latest Prelude
