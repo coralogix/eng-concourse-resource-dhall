@@ -21,4 +21,4 @@ dhall hash $explain <<< "${expression}" > /tmp/dhall_hash_output
 echo >&2 ' done!'
 
 # construct the final output
-cat /tmp/dhall_hash_output | jq --raw-input '[{"hash": . }]'
+jq --raw-input '[{"hash": . }]' < /tmp/dhall_hash_output
