@@ -1,4 +1,4 @@
-FROM alpine:3.11
+FROM alpine:3.12
 
 LABEL org.label-schema.schema-version="1.0" \
       org.label-schema.name="dhall-concourse-resource" \
