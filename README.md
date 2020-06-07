@@ -10,15 +10,15 @@ While this resource will technically work with Dhall expressions that do not inc
 
 Because Dhall's performance is highly dependent upon the presence of a warm cache, you are recommended to extend this image with one that already has a warmed cache of the libraries which you use.
 
-In other words, you should build a custom image with, e.g.:
+In other words, you should build a custom image with, e.g. (note: you cannot use `<<<` in a `Dockerfile`, that's the reason for the piped `echo` call):
 
 ```Dockerfile
 FROM quay.io/coralogix/dhall-concourse-resource:v1.32.0
 
 RUN set -ex; \
-    dhall >/dev/null <<< https://raw.githubusercontent.com/dhall-lang/dhall-lang/v16.0.0/Prelude/package.dhall && \
-    dhall >/dev/null <<< https://raw.githubusercontent.com/dhall-lang/dhall-kubernetes/v4.0.0/package.dhall && \
-    dhall >/dev/null <<< https://raw.githubusercontent.com/coralogix/dhall-kops/v0.6.3/package.dhall
+    echo 'https://raw.githubusercontent.com/dhall-lang/dhall-lang/v16.0.0/Prelude/package.dhall' | dhall >/dev/null ; \
+    echo 'https://raw.githubusercontent.com/dhall-lang/dhall-kubernetes/v4.0.0/package.dhall'    | dhall >/dev/null ; \
+    echo 'https://raw.githubusercontent.com/coralogix/dhall-kops/v0.6.3/package.dhall'           | dhall >/dev/null
 ```
 
 and use that image instead in the source for the `resource_types`.
