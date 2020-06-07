@@ -15,9 +15,10 @@ In other words, you should build a custom image with, e.g.:
 ```Dockerfile
 FROM quay.io/coralogix/dhall-concourse-resource:1.32.0
 
-RUN dhall resolve <<< https://raw.githubusercontent.com/dhall-lang/dhall-lang/v16.0.0/Prelude/package.dhall && \
-    dhall resolve <<< https://raw.githubusercontent.com/dhall-lang/dhall-kubernetes/v4.0.0/package.dhall && \
-    dhall resolve <<< https://raw.githubusercontent.com/coralogix/dhall-kops/v0.6.3/package.dhall
+RUN set -ex; \
+    dhall >/dev/null <<< https://raw.githubusercontent.com/dhall-lang/dhall-lang/v16.0.0/Prelude/package.dhall && \
+    dhall >/dev/null <<< https://raw.githubusercontent.com/dhall-lang/dhall-kubernetes/v4.0.0/package.dhall && \
+    dhall >/dev/null <<< https://raw.githubusercontent.com/coralogix/dhall-kops/v0.6.3/package.dhall
 ```
 
 and use that image instead in the source for the `resource_types`.
@@ -61,7 +62,13 @@ resources:
   source:
     expression: |
       let Config = { private : Text }
-      in https://raw.githubusercontent.com/myorg/myrepo/master/config.dhall using toMap { Authorization = "token ${env:GITHUB_TOKEN as Text}" } : Config
+      in https://raw.githubusercontent.com/myorg/myrepo/master/config.dhall
+           using
+           ( toMap
+               { Authorization =
+                   "token ${env:GITHUB_TOKEN as Text}"
+               }
+           ) : Config
     censor: true
     environment_variables:
       GITHUB_TOKEN: "((github-token))"

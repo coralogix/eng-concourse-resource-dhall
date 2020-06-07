@@ -13,9 +13,9 @@ ascii="$(jq -r 'if (.source.ascii // false) then "--ascii" else "" end' <<< "${i
 censor="$(jq -r 'if (.source.censor // false) then "--censor" else "" end' <<< "${input_json}")"
 explain="$(jq -r 'if (.source.explain // false) then "--explain" else "" end' <<< "${input_json}")"
 
-num_envvars=$(jq -r '(.source.environment_variables // []) | length')
-for key in $(jq -r '(.source.environment_variables // [])| keys[]') ; do
-  value=$(jq -r ".[\"source\"][\"environment_variables\"][\"$key\"]")
+num_envvars=$(jq -r '(.source.environment_variables // {}) | length' <<< "${input_json}")
+for key in $(jq -r '(.source.environment_variables // {})| keys[]' <<< "${input_json}") ; do
+  value=$(jq -r ".[\"source\"][\"environment_variables\"][\"$key\"]" <<< "${input_json}")
   export "$key"="$value"
 done
 echo >&2 ' done!'
