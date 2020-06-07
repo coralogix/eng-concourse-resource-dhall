@@ -6,6 +6,22 @@ A Concourse resource for fetching remote Dhall expressions.
 
 While this resource will technically work with Dhall expressions that do not include remote imports, such expressions have constant hashes and it rather defeats the purpose of having a Concourse resource to track changes.
 
+## Recommended Usage
+
+Because Dhall's performance is highly dependent upon the presence of a warm cache, you are recommended to extend this image with one that already has a warmed cache of the libraries which you use.
+
+In other words, you should build a custom image with, e.g.:
+
+```Dockerfile
+FROM quay.io/coralogix/dhall-concourse-resource:1.32.0
+
+RUN dhall resolve <<< https://raw.githubusercontent.com/dhall-lang/dhall-lang/v16.0.0/Prelude/package.dhall && \
+    dhall resolve <<< https://raw.githubusercontent.com/dhall-lang/dhall-kubernetes/v4.0.0/package.dhall && \
+    dhall resolve <<< https://raw.githubusercontent.com/coralogix/dhall-kops/v0.6.3/package.dhall
+```
+
+and use that image instead in the source for the `resource_types`.
+
 ## Source Configuration
 * `expression` : _Required_ (`string`). A Dhall expression that is fed directly to the `dhall` executable, e.g. `{ foo = "bar" }`
 * `ascii` : _Optional_ (`bool`). Wheter to pass the `--ascii` flag to the `dhall` executable. Defaults to `false`.
