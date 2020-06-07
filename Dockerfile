@@ -27,4 +27,4 @@ RUN set -euo pipefail; \
 
 WORKDIR /opt/resource
 
-COPY ./{check,in,out} /opt/resource/
+COPY ./check ./in ./out /opt/resource/
