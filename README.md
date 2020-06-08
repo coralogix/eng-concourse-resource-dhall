@@ -1,6 +1,6 @@
 # Dhall Concourse Resource Type
 
-[![Docker Repository on Quay](https://quay.io/repository/coralogix/dhall-concourse-resource/status "Docker Repository on Quay")](https://quay.io/repository/coralogix/dhall-concourse-resource)
+[![Docker Repository on Quay](https://quay.io/repository/coralogix/eng-concourse-resource-dhall/status "Docker Repository on Quay")](https://quay.io/repository/coralogix/eng-concourse-resource-dhall)
 
 A Concourse resource for fetching remote Dhall expressions.
 
@@ -13,7 +13,7 @@ Because Dhall's performance is highly dependent upon the presence of a warm cach
 In other words, you should build a custom image with, e.g. (note: you cannot use `<<<` in a `Dockerfile`, that's the reason for the piped `echo` call):
 
 ```Dockerfile
-FROM quay.io/coralogix/dhall-concourse-resource:v1.32.0
+FROM quay.io/coralogix/eng-concourse-resource-dhall:v1.32.0
 
 RUN set -ex; \
     echo 'https://raw.githubusercontent.com/dhall-lang/dhall-lang/v16.0.0/Prelude/package.dhall' | dhall >/dev/null ; \
@@ -39,7 +39,7 @@ resource_types:
 - name: dhall
   type: registry-image
   source:
-    repository: quay.io/coralogix/dhall-concourse-resource
+    repository: quay.io/coralogix/eng-concourse-resource-dhall
     tag: v1.32.0
 ```
 

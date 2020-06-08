@@ -1,9 +1,9 @@
 FROM alpine:3.12
 
 LABEL org.label-schema.schema-version="1.0" \
-      org.label-schema.name="dhall-concourse-resource" \
+      org.label-schema.name="eng-concourse-resource-dhall" \
       org.label-schema.description="A Concourse resource for fetching remote Dhall expressions." \
-      org.label-schema.vcs-url="https://github.com/coralogix/dhall-concourse-resource" \
+      org.label-schema.vcs-url="https://github.com/coralogix/eng-concourse-resource-dhall" \
       org.label-schema.vendor="Coralogix, Inc." \
       org.label-schema.version="v1.32.0"
 
