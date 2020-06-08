@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+input_json="$(cat)"
+
+echo >&2 -n 'Parsing...'
+expression="$(jq -r '.source.expression' <<< "${input_json}")"
+explain="$(jq -r 'if (.source.explain // false) then "--explain" else "" end' <<< "${input_json}")"
+
+for key in $(jq -r '(.source.environment_variables // {}) | keys[]' <<< "${input_json}") ; do
+  value=$(jq -r ".[\"source\"][\"environment_variables\"][\"$key\"]" <<< "${input_json}")
+  export "$key"="$value"
+done
+echo >&2 ' done!'
+
+mkdir -p /tmp
+
+echo >&2 -n 'Hashing expression...'
+dhall hash $explain <<< "${expression}" > /tmp/dhall_hash_output
+echo >&2 ' done!'
+
+# construct the final output
+jq --raw-input '[{"hash": . }]' < /tmp/dhall_hash_output
