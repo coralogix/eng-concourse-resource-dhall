@@ -13,7 +13,7 @@ Because Dhall's performance is highly dependent upon the presence of a warm cach
 In other words, you should build a custom image with, e.g. (note: you cannot use `<<<` in a `Dockerfile`, that's the reason for the piped `echo` call):
 
 ```Dockerfile
-FROM quay.io/coralogix/eng-concourse-resource-dhall:v1.32.0
+FROM quay.io/coralogix/eng-concourse-resource-dhall:v1.39.0
 
 RUN set -ex; \
     echo 'https://raw.githubusercontent.com/dhall-lang/dhall-lang/v16.0.0/Prelude/package.dhall' | dhall >/dev/null ; \
@@ -40,7 +40,7 @@ resource_types:
   type: registry-image
   source:
     repository: quay.io/coralogix/eng-concourse-resource-dhall
-    tag: v1.32.0
+    tag: v1.39.0
 ```
 
 Fetching the latest Prelude
