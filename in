@@ -12,7 +12,7 @@ expression="$(jq -r '.source.expression' <<< "${input_json}")"
 ascii="$(jq -r 'if (.source.ascii // false) then "--ascii" else "" end' <<< "${input_json}")"
 censor="$(jq -r 'if (.source.censor // false) then "--censor" else "" end' <<< "${input_json}")"
 explain="$(jq -r 'if (.source.explain // false) then "--explain" else "" end' <<< "${input_json}")"
-skip_validation="$(jq -r 'if (.source.skip_validation // true) then "skip-hash" else "" end' <<< "${input_json}")"
+skip_validation="$(jq -r 'if (.source.skip_validation // false) then "skip-hash" else "" end' <<< "${input_json}")"
 
 for key in $(jq -r '(.source.environment_variables // {})| keys[]' <<< "${input_json}") ; do
   value=$(jq -r ".[\"source\"][\"environment_variables\"][\"$key\"]" <<< "${input_json}")
