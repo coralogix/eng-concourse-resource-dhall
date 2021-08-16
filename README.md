@@ -28,6 +28,7 @@ and use that image instead in the source for the `resource_types`.
 * `ascii` : _Optional_ (`bool`). Wheter to pass the `--ascii` flag to the `dhall` executable. Defaults to `false`.
 * `censor` : _Optional_ (`bool`). Whether to pass the `--censor` flag to the `dhall` executable. Defaults to `false`.
 * `explain` : _Optional_ (`bool`). Whether to pass the `--explain` flag to the `dhall` executable. Defaults to `false`.
+* `skip_validation` : _Optional_ (`bool`). Whether to pass the validation on the get step. Defaults to `true`.
 * `environment_variables` : _Optional_ (`object`). Adds the included environment variables when running the `dhall` executable. See example usage below.
 
 ### Example Usage

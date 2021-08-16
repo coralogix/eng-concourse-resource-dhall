@@ -12,6 +12,7 @@ expression="$(jq -r '.source.expression' <<< "${input_json}")"
 ascii="$(jq -r 'if (.source.ascii // false) then "--ascii" else "" end' <<< "${input_json}")"
 censor="$(jq -r 'if (.source.censor // false) then "--censor" else "" end' <<< "${input_json}")"
 explain="$(jq -r 'if (.source.explain // false) then "--explain" else "" end' <<< "${input_json}")"
+skip_validation="$(jq -r 'if (.source.skip_validation // true) then "skip-hash" else "" end' <<< "${input_json}")"
 
 for key in $(jq -r '(.source.environment_variables // {})| keys[]' <<< "${input_json}") ; do
   value=$(jq -r ".[\"source\"][\"environment_variables\"][\"$key\"]" <<< "${input_json}")
@@ -26,13 +27,19 @@ echo >&2 ' done!'
 # check the output dhall, its hash must equal the expected hash, or else we are
 # required by the Concourse resource contract to exit with an error.
 
-echo >&2 -n 'Validating hash...'
-new_hash=$(dhall hash --file "${output_dir}/normal.dhall")
-if [[ "${new_hash}" != "${expected_hash}" ]]; then
-  echo >&2 -e "\nERROR - the hash of the newly resolved expression and the expected hash do not match!"
-  echo >&2 -e "\tExpected:       ${expected_hash}"
-  echo >&2 -e "\tNewly resolved: ${new_hash}"
-  echo >&2 -e "This is probably due to the expression changing between when Concourse checked the version and when the 'get/in' step was run. Try re-checking the resource and run it again."
-  exit 1
+if [[ -z "${skip_validation}" ]]; then
+  echo >&2 -n 'Skipping hash...'
+  new_hash="$(dhall hash <<< "\"dummy\"")"
+else
+  echo >&2 -n 'Validating hash...'
+  new_hash=$(dhall hash --file "${output_dir}/normal.dhall")
+  if [[ "${new_hash}" != "${expected_hash}" ]]; then
+    echo >&2 -e "\nERROR - the hash of the newly resolved expression and the expected hash do not match!"
+    echo >&2 -e "\tExpected:       ${expected_hash}"
+    echo >&2 -e "\tNewly resolved: ${new_hash}"
+    echo >&2 -e "This is probably due to the expression changing between when Concourse checked the version and when the 'get/in' step was run. Try re-checking the resource and run it again."
+    exit 1
+  fi
+  echo >&2 ' done!'
 fi
-echo >&2 ' done!'
+jq --raw-input '[{"hash": . }]' <<< "${new_hash}"
